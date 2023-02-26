@@ -1,0 +1,88 @@
+name: Python Test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-ubuntu:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]  # [ubuntu-latest, rhel-8, centos-8, windows-latest, macos-latest]
+        python-version: ["3.11"]  # ["3.8", "3.9", "3.10", "3.11"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Check Internet
+        run: |
+          nslookup google.com 1.1.1.1
+      - name: Run tests
+        env:
+          FILEIO_API_KEY: ${{ secrets.FILEIO_API_KEY }}
+        run: python tests.py
+
+  build-win:
+    needs: build-ubuntu
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest]
+        python-version: ["3.11"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Check Internet
+        run: |
+          nslookup google.com 1.1.1.1
+      - name: Run tests
+        env:
+          FILEIO_API_KEY: ${{ secrets.FILEIO_API_KEY }}
+        run: python tests.py
+
+  build-mac:
+    needs: build-win
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+        python-version: ["3.11"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Check Internet
+        run: |
+          nslookup google.com 1.1.1.1
+      - name: Run tests
+        env:
+          FILEIO_API_KEY: ${{ secrets.FILEIO_API_KEY }}
+        run: python tests.py
