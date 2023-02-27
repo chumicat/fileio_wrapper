@@ -1,3 +1,8 @@
+[![Python Test](https://github.com/chumicat/fileio_wrapper/actions/workflows/python-test.yml/badge.svg)](https://github.com/chumicat/fileio_wrapper/actions/workflows/python-test.yml)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/fileio-wrapper)](https://pypistats.org/packages/fileio-wrapper)
+[![GitHub](https://img.shields.io/github/license/chumicat/fileio_wrapper)](LICENSE)
+[![PyPI](https://img.shields.io/pypi/v/fileio-wrapper)](https://pypi.org/project/fileio-wrapper/)
+
 # fileio-wrapper 
 This Python package is a wrapper for the file.io Restful API, allowing for easy 'uploading' and 'downloading' of files and retrieval of account information, such as storage usage and other relevant metrics.
 
@@ -6,20 +11,21 @@ File.io is a cloud storage service that allows users to easily upload files, sha
  
 
 ## Methods
-| Method | Auth? | Restful API | fileio-wrapper |
-| --- | --- | --- | --- |
-| Upload | Optional | POST / | Fileio.upload()<br>fileio.upload |
-| Download | Optional | GET /{key} | Fileio.download<br>fileio.download |
-| List Files | Required | GET / | fileio.list |
-| Account Information | Required | GET /me | fileio.me |
-| Update All | Required | PUT /{key} | fileio.update(mode='replace_all') |
+| Method | Auth? | Restful API | fileio_wrapper                        |
+| --- | --- | --- |---------------------------------------|
+| Upload | Optional | POST / | Fileio.upload()<br>fileio.upload      |
+| Download | Optional | GET /{key} | Fileio.download<br>fileio.download    |
+| List Files | Required | GET / | fileio.list                           |
+| Account Information | Required | GET /me | fileio.me                             |
+| Update All | Required | PUT /{key} | fileio.update(mode='replace_all')     |
 | Update Parital | Required | PATCH /{key} | fileio.update(mode='replace_partial') |
-| Delete | Required | DELETE /{key} | fileio.delete
+| Delete | Required | DELETE /{key} | fileio.delete                         
 
 ## Usage
 ### Install the package
+[PyPI Package Link](https://pypi.org/project/fileio-wrapper/)
 ```bash
-pip install fileio_wrapper
+pip install fileio-wrapper
 ```
 ### Import the package
 > #### Import Example: 
@@ -281,3 +287,4 @@ Update an uploaded file by providing its key and modifying its attributes, such 
 ## Reference
 - [file.io API](https://www.file.io/developers)
 - [curl converter](https://curlconverter.com/)
+

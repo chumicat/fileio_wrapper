@@ -1,16 +1,27 @@
-import argparse
 import os
+import shutil
+import sys
 import threading
-import time
 import unittest
+sys.path.insert(0, os.path.join(os.getcwd(), 'src'))
+if os.getenv("GITHUB_ACTIONS"):
+    from fileio_wrapper import Fileio
+else:
+    from src.fileio_wrapper import Fileio
 from datetime import datetime, timedelta
-from fileio_wrapper import Fileio
 from queue import Queue
 from ratelimit import limits, sleep_and_retry
 
 
-fileio_api_key = os.environ.get('FILEIO_API_KEY')
-fileio_api_key = '7EITXXE.4SX7FWM-6SB40FD-NH5A1M5-KVEXA5J'
+if os.path.exists('fileio_api_key.txt'):
+    with open('fileio_api_key.txt', 'r') as f:
+        fileio_api_key = f.read().strip()
+elif os.path.exists('./tests/fileio_api_key.txt'):
+    with open('./tests/fileio_api_key.txt', 'r') as f:
+        fileio_api_key = f.read().strip()
+else:
+    fileio_api_key = os.environ.get('FILEIO_API_KEY')
+
 if fileio_api_key:
     print("I ve got API key with length {}".format(len(fileio_api_key)))
 fileio = Fileio(fileio_api_key)
@@ -27,6 +38,20 @@ def threaded_function(q: Queue, c: callable, a: tuple):
 
 
 class TestFileioWrapper(unittest.TestCase):
+    def setUp(self):
+        os.makedirs('./tt', exist_ok=True)
+        with open('a.txt', "w") as f:
+            f.write("Hello")
+        with open('b.txt', "w") as f:
+            f.write("Hello")
+
+    def tearDown(self):
+        shutil.rmtree('./tt')
+        os.remove('a.txt')
+        for file in ['a.txt', 'b.txt', 'aaa.cc', '_aaa.cc']:
+            if os.path.exists(file):
+                os.remove(file)
+
     @unittest.skip("Not threading test. As an code Archived.")
     def test_upload_no_auth_no_threading(self):
         self.assertTrue(Fileio.upload('a.txt')['success'])
@@ -153,8 +178,8 @@ class TestFileioWrapper(unittest.TestCase):
     def test_update(self):
         self.assertTrue(fileio.upload('a.txt')['success'])
         resp = fileio.list()
-        self.assertTrue(fileio.update(resp['nodes'][0]['key'], file='aaa.cc', expires='20m', max_downloads=1, \
-            auto_delete=True, mode='replace_all'))
+        self.assertTrue(fileio.update(resp['nodes'][0]['key'], file='b.txt', expires='20m', max_downloads=1, \
+                                      auto_delete=True, mode='replace_all'))
         self.assertTrue(fileio.update(resp['nodes'][0]['key'], expires=timedelta(seconds=60000), mode='replace_partial'))
         self.assertTrue(fileio.update(resp['nodes'][0]['key'], file='a.txt'))
         self.test_delete()
@@ -174,8 +199,5 @@ class TestFileioWrapper(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    os.makedirs('tt', exist_ok=True)
-    with open('a.txt', "w") as f:
-        f.write("Hello")
     unittest.main()
 

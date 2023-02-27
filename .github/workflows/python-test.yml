@@ -4,13 +4,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - '*.py'
   pull_request:
     branches:
       - main
-    paths:
-      - '*.py'
   workflow_dispatch:
 
 jobs:
@@ -30,14 +26,17 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements-test.txt
+          pip install -e .
       - name: Check Internet
         run: |
           nslookup google.com 1.1.1.1
+          export PYTHONPATH=$PYTHONPATH:/home/runner/work/fileio_wrapper/fileio_wrapper
+          echo $PYTHONPATH
       - name: Run tests
         env:
           FILEIO_API_KEY: ${{ secrets.FILEIO_API_KEY }}
-        run: python tests.py
+        run: python tests/test_fileio_wrapper.py
 
   build-win:
     needs: build-ubuntu
@@ -56,14 +55,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements-test.txt
       - name: Check Internet
         run: |
           nslookup google.com 1.1.1.1
       - name: Run tests
         env:
           FILEIO_API_KEY: ${{ secrets.FILEIO_API_KEY }}
-        run: python tests.py
+        run: python tests/test_fileio_wrapper.py
 
   build-mac:
     needs: build-win
@@ -82,11 +81,11 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install -r requirements-test.txt
       - name: Check Internet
         run: |
           nslookup google.com 1.1.1.1
       - name: Run tests
         env:
           FILEIO_API_KEY: ${{ secrets.FILEIO_API_KEY }}
-        run: python tests.py
+        run: python tests/test_fileio_wrapper.py

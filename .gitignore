@@ -5,4 +5,5 @@ __pycache__/
 tt/
 _aaa.cc
 aaa.cc
-a.txt
+tests/a.txt
+fileio_api_key.txt
