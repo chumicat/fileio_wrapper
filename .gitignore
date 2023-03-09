@@ -3,6 +3,7 @@ venv*/
 .run/
 __pycache__/
 tt/
+src/fileio_wrapper.egg-info/
 _aaa.cc
 aaa.cc
 tests/a.txt

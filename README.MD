@@ -52,8 +52,8 @@ Some methods in this service do not require authentication, which means that you
 Uploading files to file.io is easy and can be done without authentication. However, if you authenticate with the service, you can manage your uploaded files and have access to greater storage capacity by purchasing a paid plan.
 > #### Upload Declaration: 
 > ```python
-> Fileio.upload(file, expires, max_downloads, auto_delete)
-> fileio.upload(file, expires, max_downloads, auto_delete)
+> Fileio.upload(file[, expires][, max_downloads][, auto_delete])
+> fileio.upload(file[, expires][, max_downloads][, auto_delete])
 > ```
 > #### Upload Parameter
 > | Parameter     | Description                                | Default Value | Free Account Limit |
@@ -101,8 +101,8 @@ Uploading files to file.io is easy and can be done without authentication. Howev
 You can download the file from file.io without authentication. Notice that each file can only be downloaded once by default and will be automatically deleted afterwards, regardless of whether you authenticate or not. The maximum number of downloads allowed for a file is determined by the uploader, and can be increased with a paid account.
 > #### Download Declaration: 
 > ```python
-> Fileio.download(key, file)
-> fileio.download(key, file)
+> Fileio.download(key[, file])
+> fileio.download(key[, file])
 > ```
 > #### Download Parameter
 > | Parameter | Description                  | Default |
@@ -141,7 +141,7 @@ You can download the file from file.io without authentication. Notice that each 
 List File in an account. Authenticate is needed to call the method.
 > #### List Declaration: 
 > ```python
-> fileio.list(search, sort, offset, limit)
+> fileio.list([search][, sort][, offset][, limit])
 > ```
 > 
 > #### List Parameter
@@ -212,7 +212,8 @@ Retrive Account Information, such as account plan level and restriction. Authent
 Update an uploaded file by providing its key and modifying its attributes, such as the expiration date, maximum number of downloads, or even the file itself associated with the key. Authenticate is needed to call the method.
 > #### Update Declaration: 
 > ```python
-> fileio.update(key, file, expires, max_downloads, auto_delete)
+> fileio.update(key[, file][, expires][, max_downloads][, auto_delete][, mode='replace_partial'])
+> fileio.update(key, file[, expires][, max_downloads][, auto_delete], mode='replace_all')
 > ```
 > #### Update Parameter
 > | Parameter     | Description                                | Default Value | Free Account Limit |
